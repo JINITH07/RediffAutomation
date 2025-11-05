@@ -3,43 +3,40 @@ package com.learning.test.Rediff;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+public class AppTest {
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-{
-	
-  
-	WebDriver driver=new ChromeDriver();
-	
-	@BeforeTest
-    public void AppTestdriver( )
-    {
-		driver.get("https://www.rediff.com");
+    WebDriver driver;
 
+    @BeforeTest
+    public void setup() {
+    	WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+
+        driver = new ChromeDriver(options);
+        driver.get("https://www.rediff.com");
     }
 
-	@org.testng.annotations.Test
-    public void suite()
-    {
-       WebElement money=driver.findElement(By.className("linkcolor"));
-  
-       money.click();
+    @Test
+    public void suite() {
+        WebElement money = driver.findElement(By.className("linkcolor"));
+        money.click();
+        System.out.println("Clicked Money link successfully!");
     }
 
-	@AfterTest
-    public void testApp()
-    {
-      // driver.quit();
+    @AfterTest
+    public void teardown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
